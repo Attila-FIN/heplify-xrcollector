@@ -36,11 +36,19 @@ func main() {
 	connXR, err := net.ListenUDP("udp", addrXR)
 	if err != nil {
 		log.Fatalln(err)
+	} else {
+		if cfg.Debug {
+			log.Printf("Started listening on address: %s", cfg.CollectorAddress)
+		}
 	}
 
 	connHEP, err := net.Dial("udp", cfg.HepServerAddress)
 	if err != nil {
 		log.Fatalln(err)
+	} else {
+		if cfg.Debug {
+			log.Printf("Connected to HEP UDP server: %s", cfg.HepServerAddress)
+		}
 	}
 
 	inXRCh := make(chan XRPacket, 100)
