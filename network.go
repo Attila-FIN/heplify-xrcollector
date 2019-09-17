@@ -53,10 +53,16 @@ func sendXR(conn *net.UDPConn, outXRCh chan XRPacket) {
 
 func sendHEP(conn net.Conn, outHEPCh chan []byte) {
 	for packet := range outHEPCh {
-		_, err := conn.Write(encodeHEP(packet, 35))
+		//_, err := conn.Write(encodeHEP(packet, 35))
+		var encodedHepMessage = encodeHEP(packet, 35)
+		//_, err := conn.Write(encodedHepMessage[:1400])
+		_, err := conn.Write(encodedHepMessage)
 		if err != nil {
 			log.Println("Error on HEP write: ", err)
 			continue
+		} else {
+			log.Println("HEP packet has been sent. Size was:", len(encodedHepMessage))
+			//log.Println(packet)
 		}
 	}
 }
