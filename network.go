@@ -77,12 +77,11 @@ func process(pkt []byte) ([]byte, error) {
 		return nil, fmt.Errorf("No or malformed vq-rtcpxr inside SIP Message:\n%s", sip.Msg)
 	}
 
-	resp := fmt.Sprintf("SIP/2.0 200 OK\r\nVia: %s\r\nFrom: %s\r\nTo: %s;tag=Fg2Uy0r7geBQF\r\nContact: %s\r\n"+
+	resp := fmt.Sprintf("SIP/2.0 200 OK\r\nVia: %s\r\nFrom: %s\r\nTo: %s;tag=Fg2Uy0r7geBQF\r\n"+
 		"Call-ID: %s\r\nCseq: %s\r\nUser-Agent: heplify-xrcollector\r\nContent-Length: 0\r\n\r\n",
 		sip.ViaOne,
 		sip.From.Val,
 		sip.To.Val,
-		sip.ContactVal,
 		sip.CallID,
 		sip.Cseq.Val)
 	return []byte(resp), nil
