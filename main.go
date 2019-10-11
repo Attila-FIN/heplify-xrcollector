@@ -20,7 +20,7 @@ func init() {
 		flag.PrintDefaults()
 	}
 
-	flag.StringVar(&cfg.HepServerAddress, "hs", "127.0.0.1:9060", "HEP UDP server address")
+	flag.StringVar(&cfg.HttpServerAddress, "hs", "http://127.0.0.1:80", "HTTP server address")
 	flag.StringVar(&cfg.CollectorAddress, "xs", ":5060", "XR collector UDP listen address")
 	flag.UintVar(&cfg.HepNodeID, "hi", 3333, "HEP ID")
 	flag.BoolVar(&cfg.Debug, "debug", false, "Log with debug level")
@@ -38,18 +38,20 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	connHEP, err := net.Dial("udp", cfg.HepServerAddress)
-	if err != nil {
-		log.Fatalln(err)
-	}
+	// connHEP, err := net.Dial("udp", cfg.HepServerAddress)
+	// if err != nil {
+	// 	log.Fatalln(err)
+	// }
 
 	inXRCh := make(chan XRPacket, 100)
 	outXRCh := make(chan XRPacket, 100)
-	outHEPCh := make(chan []byte, 100)
+	//outHEPCh := make(chan []byte, 100)
+	outHTTPCh := make(chan []byte, 100)
 
-	go recvXR(connXR, inXRCh, outHEPCh)
+	go recvXR(connXR, inXRCh, outHTTPCh)
 	go sendXR(connXR, outXRCh)
-	go sendHEP(connHEP, outHEPCh)
+	//go sendHEP(connHEP, outHEPCh)
+	go sendHTTP(cfg.HttpServerAddress, outHTTPCh)
 
 	for packet := range inXRCh {
 		outXRCh <- packet

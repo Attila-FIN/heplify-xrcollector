@@ -3,8 +3,8 @@ package main
 var cfg config
 
 type config struct {
-	HepServerAddress string
-	CollectorAddress string
-	HepNodeID        uint
-	Debug            bool
+	HttpServerAddress string
+	CollectorAddress  string
+	HepNodeID         uint
+	Debug             bool
 }
